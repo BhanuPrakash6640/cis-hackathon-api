@@ -249,7 +249,7 @@ export const requestPresets = [
     method: "POST",
     url: "https://jsonplaceholder.typicode.com/posts",
     headers: "Accept: application/json\nContent-Type: application/json",
-    body: '{\n  "title": "Latency regression",\n  "body": "Repro from PulseForge",\n  "userId": 42\n}',
+    body: '{\n  "title": "Latency regression",\n  "body": "Repro from CIS Hackathon",\n  "userId": 42\n}',
     params: "source=judge-demo\nmode=replay",
     schema:
       "POST /posts\n- Expect 201 Created\n- Assert `title`, `body`, and `userId` echo in the payload\n- Validate response size stays under 2 KB",

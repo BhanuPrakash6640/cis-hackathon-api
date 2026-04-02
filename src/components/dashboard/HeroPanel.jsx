@@ -18,7 +18,7 @@ function HeroPanel({ onNavigate }) {
         <div>
           <p className="eyebrow">Premium API intelligence</p>
           <h1 className="max-w-3xl font-display text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl xl:text-[4.1rem]">
-            PulseForge gives every API call a <span className="text-gradient">control room</span>.
+            CIS Hackathon gives every API call a <span className="text-gradient">control room</span>.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300/78 sm:text-lg">
             An AI-powered Postman, debugger, and monitoring dashboard for teams that need fast

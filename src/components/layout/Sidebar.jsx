@@ -36,7 +36,7 @@ function Sidebar({ activeSection, isOpen, items, onClose, onNavigate }) {
                 <Command className="h-5 w-5 text-sky-100" />
               </div>
               <div>
-                <p className="font-display text-lg font-semibold text-slate-50">PulseForge</p>
+                <p className="font-display text-lg font-semibold text-slate-50">CIS Hackathon</p>
                 <p className="surface-label mt-1">Developer Command Center</p>
               </div>
             </button>
@@ -138,7 +138,7 @@ function Sidebar({ activeSection, isOpen, items, onClose, onNavigate }) {
               <div className="glass-subpanel px-3 py-3 text-sm text-slate-300">
                 <p className="font-medium text-slate-100">Pitch cue</p>
                 <p className="mt-2 leading-6 text-slate-400">
-                  “PulseForge turns every API call into a live, observable product workflow.”
+                  "CIS Hackathon turns every API call into a live, observable product workflow."
                 </p>
               </div>
             </div>

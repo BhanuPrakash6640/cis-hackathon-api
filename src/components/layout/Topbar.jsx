@@ -27,7 +27,7 @@ function Topbar({ onMenuToggle, onNavigate }) {
           type="button"
         >
           <Command className="h-4 w-4 text-sky-200" />
-          PulseForge
+          CIS Hackathon
         </button>
 
         <label className="group relative flex min-w-0 flex-1 items-center xl:max-w-xl">

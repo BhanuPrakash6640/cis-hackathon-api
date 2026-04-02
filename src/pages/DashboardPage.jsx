@@ -598,7 +598,7 @@ function DashboardPage({ onNavigate }) {
               </div>
 
               <h1 className="mt-5 max-w-4xl font-display text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl xl:text-[4.15rem]">
-                PulseForge is the <span className="text-gradient">developer command center</span> for every critical API moment.
+                CIS Hackathon is the <span className="text-gradient">developer command center</span> for every critical API moment.
               </h1>
 
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300/78 sm:text-lg">
@@ -774,7 +774,7 @@ function DashboardPage({ onNavigate }) {
               Shared replay packs
             </span>
           }
-          description="Collections now read like deployable workflows instead of generic folders, reinforcing that PulseForge can move from single-request demos into repeatable operational playbooks."
+          description="Collections now read like deployable workflows instead of generic folders, reinforcing that CIS Hackathon can move from single-request demos into repeatable operational playbooks."
           eyebrow="Collections"
           title="Curated request packs keep the best flows one click away"
         />
