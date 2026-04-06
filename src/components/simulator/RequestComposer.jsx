@@ -20,10 +20,10 @@ const methodToneClasses = {
 };
 
 const requestTabs = [
-  { id: "body", label: "Body", detail: "Payload editor" },
-  { id: "headers", label: "Headers", detail: "Transport control" },
-  { id: "params", label: "Params", detail: "Query shaping" },
-  { id: "schema", label: "Schema", detail: "Contract notes" },
+  { id: "body", label: "Body", detail: "Payload" },
+  { id: "headers", label: "Headers", detail: "Request headers" },
+  { id: "params", label: "Params", detail: "Query string" },
+  { id: "schema", label: "Notes", detail: "Checks and tests" },
 ];
 
 function parseEntries(block) {
@@ -99,7 +99,7 @@ function RequestComposer() {
             <DetailCard
               label="Header count"
               value={String(headerEntries.length).padStart(2, "0")}
-              detail="Transport directives, auth, and content negotiation stay visible while you edit."
+              detail="Keep auth and content type visible while you edit."
             />
             <div className="glass-subpanel px-4 py-4">
               <p className="text-sm font-semibold text-slate-100">Header preview</p>
@@ -116,7 +116,7 @@ function RequestComposer() {
                   ))
                 ) : (
                   <p className="rounded-2xl border border-dashed border-white/10 px-3 py-4 text-sm text-slate-400">
-                    No transport headers yet. Add auth or content negotiation to harden the replay.
+                    No headers yet. Add auth or content type if this route needs them.
                   </p>
                 )}
               </div>
@@ -134,7 +134,7 @@ function RequestComposer() {
             <textarea
               className="textarea-shell min-h-[240px]"
               onChange={(event) => updateRequestField("params", event.target.value)}
-              placeholder={"trace=launch-readiness\nregion=shadow-us"}
+              placeholder={"source=dashboard\nregion=shadow-us"}
               value={requestDraft.params}
             />
           </label>
@@ -143,7 +143,7 @@ function RequestComposer() {
             <DetailCard
               label="Param slots"
               value={String(paramEntries.length).padStart(2, "0")}
-              detail="Shape the request without cluttering the endpoint field."
+              detail="Add query values without cramming them into the URL field."
             />
             <div className="glass-subpanel px-4 py-4">
               <p className="text-sm font-semibold text-slate-100">Resolved preview</p>
@@ -158,7 +158,7 @@ function RequestComposer() {
                   ))
                 ) : (
                   <p className="rounded-2xl border border-dashed border-white/10 px-3 py-4 text-sm text-slate-400">
-                    No query params yet. Add trace labels or routing hints for the demo.
+                    No query params yet. Add filters, IDs, or routing hints if you need them.
                   </p>
                 )}
               </div>
@@ -172,11 +172,11 @@ function RequestComposer() {
       return (
         <>
           <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-200">Contract notes and generated tests</span>
+            <span className="text-sm font-semibold text-slate-200">Notes and test stub</span>
             <textarea
               className="textarea-shell min-h-[240px]"
               onChange={(event) => updateRequestField("schema", event.target.value)}
-              placeholder="Add schema cues, assertions, or test scaffolding"
+              placeholder="Add checks, assumptions, or a small test stub"
               value={requestDraft.schema}
             />
           </label>
@@ -185,27 +185,27 @@ function RequestComposer() {
             <DetailCard
               label="Test lane"
               value="Ready"
-              detail="Generate a starter contract test, then refine it before you save the request."
+              detail="Generate a starter test, then edit the expectations before you save the request."
             />
             <div className="glass-subpanel px-4 py-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-semibold text-slate-100">Schema cues</p>
+                  <p className="text-sm font-semibold text-slate-100">Checks to keep in mind</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Keep the live demo grounded on clear pass and fail expectations.
+                    Write down what should pass, fail, or stay stable for this route.
                   </p>
                 </div>
                 <button className="action-chip" onClick={generateTestBlueprint} type="button">
                   <Sparkles className="h-3.5 w-3.5" />
-                  Regenerate
+                  Generate again
                 </button>
               </div>
               <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
                 <p className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3">
-                  Assert healthy status, contract shape, and latency budget so the narrative stays crisp.
+                  Check the status code, content type, and any fields that should always be present.
                 </p>
                 <p className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3">
-                  When you surface a failure, the response workspace can immediately explain the delta.
+                  If the request fails, this tab gives you a place to record what changed and what to verify next.
                 </p>
               </div>
             </div>
@@ -230,10 +230,10 @@ function RequestComposer() {
           <DetailCard
             label="Payload size"
             value={`${bodyBytes} B`}
-            detail="Tune the body in one place, then watch response size and contract behavior change downstream."
+            detail="Useful when you want to compare request size against the response that comes back."
           />
           <div className="glass-subpanel px-4 py-4">
-            <p className="text-sm font-semibold text-slate-100">Active sample flow</p>
+            <p className="text-sm font-semibold text-slate-100">Current example</p>
             <p className="mt-2 text-lg font-semibold text-slate-50">{activePreset.label}</p>
             <p className="mt-2 text-sm leading-6 text-slate-400">{activePreset.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -253,21 +253,15 @@ function RequestComposer() {
       <div className="relative">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div>
-            <p className="surface-label">API Tester</p>
-            <h3 className="mt-2 font-display text-3xl font-semibold text-slate-50">
-              Dispatch probes with <span className="text-gradient">operator-grade control</span>
+            <h3 className="font-display text-3xl font-semibold text-slate-50">
+              Request Builder
             </h3>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300/76">
-              Build a request, switch between sample flows, generate test scaffolding, and preserve
-              the strongest replay directly from the command deck.
-            </p>
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="badge-neutral">{selectedEnvironment}</span>
             <span className={requestState.loading ? "badge-info" : "badge-good"}>
               <span className={`status-dot ${requestState.loading ? "bg-sky-300" : "bg-emerald-300"}`} />
-              {requestState.loading ? "Probe in flight" : "Console armed"}
+              {requestState.loading ? "Sending" : "Ready"}
             </span>
           </div>
         </div>
@@ -275,19 +269,19 @@ function RequestComposer() {
         <div className="mt-5 flex flex-wrap gap-2">
           <button className="action-chip" onClick={loadNextPreset} type="button">
             <Play className="h-3.5 w-3.5" />
-            Load Sample
+            Next example
           </button>
           <button className="action-chip" onClick={saveCurrentRequest} type="button">
             <BookmarkPlus className="h-3.5 w-3.5" />
-            Save Request
+            Save request
           </button>
           <button className="action-chip" onClick={generateTestBlueprint} type="button">
             <Sparkles className="h-3.5 w-3.5" />
-            Generate Tests
+            Create test stub
           </button>
           <button className="action-chip" onClick={exportRequestCode} type="button">
             <FileCode2 className="h-3.5 w-3.5" />
-            Export Code
+            Copy fetch code
           </button>
         </div>
 
@@ -306,9 +300,7 @@ function RequestComposer() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-semibold text-slate-100">{preset.label}</p>
-                  <span className={isActive ? "badge-info" : "badge-neutral"}>{preset.method}</span>
                 </div>
-                <p className="mt-2 text-sm leading-6 text-slate-400">{preset.description}</p>
               </button>
             );
           })}
@@ -353,7 +345,7 @@ function RequestComposer() {
               whileTap={{ scale: 0.98 }}
             >
               <SendHorizonal className="mr-2 h-4 w-4" />
-              {requestState.loading ? "Dispatching" : "Dispatch Probe"}
+              {requestState.loading ? "Sending" : "Send request"}
             </motion.button>
           </div>
         </div>
@@ -386,17 +378,17 @@ function RequestComposer() {
           <DetailCard
             label="Headers"
             value={String(headerEntries.length).padStart(2, "0")}
-            detail="Visible transport rules keep auth and content negotiation from becoming hidden state."
+            detail="Quick count of the headers attached to the current request."
           />
           <DetailCard
             label="Params"
             value={String(paramEntries.length).padStart(2, "0")}
-            detail="Routing hints and trace labels are editable without crowding the endpoint field."
+            detail="Keeps query values visible without crowding the URL field."
           />
           <DetailCard
-            label="Schema lane"
+            label="Notes"
             value={requestDraft.schema ? "Primed" : "Empty"}
-            detail="Contract notes and generated tests stay next to the live request, not in a separate doc."
+            detail="Place for checks, assumptions, or the generated test stub."
           />
         </div>
       </div>

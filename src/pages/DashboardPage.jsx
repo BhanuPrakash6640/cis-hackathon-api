@@ -79,9 +79,11 @@ function SectionIntro({ eyebrow, title, description, action }) {
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
       <div>
-        <p className="surface-label">{eyebrow}</p>
-        <h2 className="mt-2 font-display text-3xl font-semibold text-slate-50">{title}</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300/74">{description}</p>
+        <p className="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-sky-700/80">
+          {eyebrow}
+        </p>
+        <h2 className="mt-2 font-display text-3xl font-semibold text-slate-900">{title}</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{description}</p>
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
@@ -142,10 +144,8 @@ function TrafficChart() {
     <div className="glass-card p-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="surface-label">Response Trend</p>
-          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">
-            Traffic pulse and latency envelope
-          </h3>
+          <p className="surface-label">Traffic</p>
+          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">Traffic and latency</h3>
         </div>
         <span className="badge-neutral">
           <ChartColumn className="h-4 w-4" />
@@ -222,11 +222,9 @@ function RecentRequestsTable({ items }) {
     return (
       <div className="glass-card flex min-h-[420px] items-center justify-center p-6">
         <div className="max-w-lg text-center">
-          <p className="font-display text-2xl font-semibold text-slate-50">
-            No request traces match the current view
-          </p>
+          <p className="font-display text-2xl font-semibold text-slate-50">No requests match this view</p>
           <p className="mt-3 text-sm leading-7 text-slate-400">
-            Adjust the global search or dispatch a fresh probe to refill the replay history.
+            Adjust the search or run another request to add new history items.
           </p>
         </div>
       </div>
@@ -265,7 +263,7 @@ function RecentRequestsTable({ items }) {
               <div>
                 <p className="break-all text-sm font-medium text-slate-50">{item.endpoint}</p>
                 <p className="mt-1 text-xs text-slate-500">
-                  {item.environment} • {item.source} • {item.timestamp}
+                  {item.environment} | {item.source} | {item.timestamp}
                 </p>
                 {item.errorMessage ? (
                   <p className="mt-2 text-xs text-rose-200/82">{item.errorMessage}</p>
@@ -319,12 +317,9 @@ function CollectionsPreview({ items }) {
     return (
       <div className="glass-card flex min-h-[260px] items-center justify-center p-6">
         <div className="max-w-md text-center">
-          <p className="font-display text-2xl font-semibold text-slate-50">
-            No collections in the current lens
-          </p>
+          <p className="font-display text-2xl font-semibold text-slate-50">No saved requests match this view</p>
           <p className="mt-3 text-sm leading-7 text-slate-400">
-            Save the active request or clear the search filter to bring curated replay packs back into
-            view.
+            Save the current request or clear the search to bring the saved groups back.
           </p>
         </div>
       </div>
@@ -365,7 +360,7 @@ function RecentFailuresWidget({ items }) {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="surface-label">Recent Failures</p>
-          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">Triage queue</h3>
+          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">Items to check</h3>
         </div>
         <span className={items.length ? "badge-danger" : "badge-good"}>
           <TriangleAlert className="h-4 w-4" />
@@ -382,7 +377,7 @@ function RecentFailuresWidget({ items }) {
                 <span className="badge-warning">{item.status || "ERR"}</span>
               </div>
               <p className="mt-2 text-sm text-slate-400">
-                {item.environment} • {formatDuration(item.duration)} • {item.timestamp}
+                {item.environment} | {formatDuration(item.duration)} | {item.timestamp}
               </p>
               {item.errorMessage ? (
                 <p className="mt-3 text-sm leading-6 text-rose-200/74">{item.errorMessage}</p>
@@ -391,7 +386,7 @@ function RecentFailuresWidget({ items }) {
           ))
         ) : (
           <div className="rounded-[1.3rem] border border-dashed border-white/10 px-4 py-6 text-sm text-slate-400">
-            No failing traces right now. Use Auth Breaker to demo the diagnosis lane.
+            No failures right now. Run the 401 example if you want to exercise the error states.
           </div>
         )}
       </div>
@@ -404,14 +399,12 @@ function InsightAlertsPanel() {
     <div className="glass-card p-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="surface-label">Insight Alerts</p>
-          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">
-            AI-ranked operational signals
-          </h3>
+          <p className="surface-label">Recent Issues</p>
+          <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">Sorted by urgency</h3>
         </div>
         <span className="badge-neutral">
           <Sparkles className="h-4 w-4" />
-          Ranked in real time
+          Updated automatically
         </span>
       </div>
 
@@ -432,7 +425,7 @@ function InsightAlertsPanel() {
               </div>
             </div>
             <div className="mt-4 flex items-center justify-between gap-3 rounded-[1.1rem] border border-white/10 bg-slate-950/40 px-3 py-3 text-sm">
-              <span className="text-slate-400">Recommended move</span>
+              <span className="text-slate-400">Next step</span>
               <span className="text-slate-100">{alert.action}</span>
             </div>
           </div>
@@ -447,14 +440,14 @@ function InsightPlaybookPanel() {
     <div className="glass-card p-5">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="surface-label">Demo Narrative</p>
+          <p className="surface-label">Suggested Flow</p>
           <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">
-            Three moves that land the product story
+            A simple walkthrough that feels natural
           </h3>
         </div>
         <span className="badge-good">
           <ShieldCheck className="h-4 w-4" />
-          Judge friendly
+          Short and clear
         </span>
       </div>
 
@@ -499,28 +492,20 @@ function SettingsDeck({ demoMode, readinessScore, selectedEnvironment }) {
       </div>
 
       <div className="glass-shell p-6">
-        <p className="surface-label">Control Surface</p>
-        <h3 className="mt-2 font-display text-3xl font-semibold text-slate-50">
-          Launch posture stays visible
-        </h3>
+        <p className="surface-label">Workspace</p>
+        <h3 className="mt-2 font-display text-3xl font-semibold text-slate-50">A few useful controls</h3>
         <div className="mt-6 grid gap-4">
           <div className="glass-subpanel px-4 py-4">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-400">Demo mode</span>
+              <span className="text-sm text-slate-400">Sample data</span>
               <span className={demoMode ? "badge-good" : "badge-neutral"}>
-                {demoMode ? "Enabled" : "Disabled"}
+                {demoMode ? "On" : "Off"}
               </span>
             </div>
           </div>
           <div className="glass-subpanel px-4 py-4">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-400">Environment</span>
-              <span className="badge-info">{selectedEnvironment}</span>
-            </div>
-          </div>
-          <div className="glass-subpanel px-4 py-4">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-slate-400">Readiness score</span>
+              <span className="text-sm text-slate-400">Health score</span>
               <span className="badge-good">{readinessScore}/100</span>
             </div>
             <div className="mt-4 h-2 rounded-full bg-white/[0.06]">
@@ -529,10 +514,6 @@ function SettingsDeck({ demoMode, readinessScore, selectedEnvironment }) {
                 style={{ width: `${readinessScore}%` }}
               />
             </div>
-          </div>
-          <div className="glass-subpanel px-4 py-4 text-sm leading-7 text-slate-400">
-            Keep this section near the end of the walkthrough to reinforce that the product is not
-            just a stylish API client, but a deployable operational surface.
           </div>
         </div>
       </div>
@@ -558,15 +539,15 @@ function DashboardPage({ onNavigate }) {
 
   const statValues = {
     "active-alerts": {
-      trend: `${recentFailures.length} elevated traces in view`,
+      trend: `${recentFailures.length} recent items need a closer look`,
       value: formatNumber(activeAlerts),
     },
     "average-response": {
-      trend: "Latency envelope held under 300 ms for healthy flows",
+      trend: "Healthy requests are staying around the 300 ms mark",
       value: formatDuration(averageResponseTime),
     },
     "readiness-score": {
-      trend: demoMode ? "Judge deck is armed and motion-ready" : "Demo motion is paused",
+      trend: demoMode ? "Sample data is helping fill the workspace" : "Showing only live requests",
       value: `${readinessScore}/100`,
     },
     "slow-endpoints": {
@@ -574,11 +555,11 @@ function DashboardPage({ onNavigate }) {
       value: formatNumber(slowEndpointCount),
     },
     "success-rate": {
-      trend: "Healthy 2xx and 3xx responses dominate the replay lane",
+      trend: "Most requests in view are succeeding",
       value: formatPercent(successRate),
     },
     "total-requests": {
-      trend: "Replay volume stays presentation-ready and operationally dense",
+      trend: "Seed data and live runs are shown together",
       value: formatNumber(totalRequests),
     },
   };
@@ -590,169 +571,56 @@ function DashboardPage({ onNavigate }) {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_18%,rgba(56,189,248,0.18),transparent_24%),radial-gradient(circle_at_12%_100%,rgba(34,197,94,0.16),transparent_28%)]" />
           <div className="absolute inset-y-0 right-0 hidden w-[42%] bg-hero-grid bg-[length:52px_52px] opacity-[0.06] xl:block" />
 
-          <div className="relative grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
-            <div>
+          <div className="relative">
+            <div className="max-w-5xl">
               <div className="badge-neutral">
                 <Command className="h-4 w-4 text-sky-200" />
-                Premium API operations surface
+                API request workspace
               </div>
 
-              <h1 className="mt-5 max-w-4xl font-display text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl xl:text-[4.15rem]">
-                CIS Hackathon is the <span className="text-gradient">developer command center</span> for every critical API moment.
+              <h1 className="mt-5 font-display text-4xl font-semibold tracking-tight text-slate-50 sm:text-5xl xl:text-[4.15rem]">
+                Run requests, inspect responses, and keep the last few issues in one place.
               </h1>
 
               <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300/78 sm:text-lg">
-                Test live endpoints, replay golden paths, monitor fleet health, and explain failures
-                from a single premium control surface built to impress technical judges and real operators.
+                Send live requests, compare payloads, scan recent failures, and save the examples
+                your team keeps coming back to.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-2">
-                {heroStatusPills.map((pill) => (
-                  <span key={pill.label} className={heroToneClasses[pill.tone]}>
-                    <pill.icon className="h-4 w-4" />
-                    {pill.label}
-                    <span className="text-slate-200/78">{pill.value}</span>
-                  </span>
-                ))}
-              </div>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <button className="button-primary" onClick={() => onNavigate("api-tester")} type="button">
-                  Launch API probe
+                  Try a request
                 </button>
                 <button className="button-secondary" onClick={() => onNavigate("replay-console")} type="button">
-                  Open replay console
+                  See latest response
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </button>
               </div>
 
-              <div className="mt-8 grid gap-3 md:grid-cols-3">
-                {heroMiniMetrics.map((item) => (
-                  <div key={item.title} className="glass-subpanel px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{item.title}</p>
-                    <p className="mt-3 font-display text-2xl font-semibold text-slate-50">{item.value}</p>
-                    <p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              <div className="glass-card overflow-hidden p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="surface-label">Command Deck</p>
-                    <h3 className="mt-2 font-display text-2xl font-semibold text-slate-50">
-                      Everything the judges need to see
-                    </h3>
-                  </div>
-                  <span className="badge-good">
-                    <ShieldCheck className="h-4 w-4" />
-                    {selectedEnvironment}
-                  </span>
-                </div>
-
-                <div className="mt-5 grid gap-3">
-                  {commandDeckHighlights.map((item) => (
-                    <div key={item.title} className="rounded-[1.3rem] border border-white/10 bg-white/[0.04] px-4 py-4">
-                      <div className="flex items-start gap-3">
-                        <div className="rounded-[1rem] border border-white/10 bg-white/[0.05] p-2.5 text-sky-100">
-                          <item.icon className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <p className="font-semibold text-slate-100">{item.title}</p>
-                          <p className="mt-2 text-sm leading-6 text-slate-400">{item.detail}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="glass-card p-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="surface-label">Live Readiness</p>
-                    <p className="mt-2 font-display text-2xl font-semibold text-slate-50">
-                      {readinessScore}/100 launch confidence
-                    </p>
-                  </div>
-                  <span className="badge-neutral">
-                    <Radar className="h-4 w-4" />
-                    Dense signal
-                  </span>
-                </div>
-                <div className="mt-5 h-2 rounded-full bg-white/[0.06]">
-                  <div
-                    className="h-2 rounded-full bg-gradient-to-r from-sky-300 via-cyan-300 to-emerald-300"
-                    style={{ width: `${readinessScore}%` }}
-                  />
-                </div>
-                <p className="mt-4 text-sm leading-7 text-slate-400">
-                  The workspace balances healthy baselines, real anomalies, polished motion, and
-                  product-language copy to make the walkthrough feel launch-ready.
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-6">
-          {kpiDefinitions.map((stat) => (
-            <KpiCard
-              key={stat.id}
-              accent={stat.accent}
-              footnote={stat.footnote}
-              icon={stat.icon}
-              label={stat.label}
-              trend={statValues[stat.id].trend}
-              value={statValues[stat.id].value}
-            />
-          ))}
-        </div>
       </section>
 
       <section className="scroll-mt-32 space-y-4" data-section="api-tester" id="api-tester">
         <SectionIntro
-          action={
-            <span className="badge-info">
-              <Sparkles className="h-4 w-4" />
-              Power-user console
-            </span>
-          }
-          description="The request builder now behaves like a serious API workstation: strong method controls, live sample flows, quick actions, and contract-aware tabs."
-          eyebrow="Compose"
-          title="API tester built for speed, clarity, and showmanship"
+          title="A request builder"
         />
         <RequestComposer />
       </section>
 
       <section className="scroll-mt-32 space-y-4" data-section="replay-console" id="replay-console">
         <SectionIntro
-          action={
-            <span className="badge-neutral">
-              <Command className="h-4 w-4" />
-              Multi-tab analysis
-            </span>
-          }
-          description="The response workspace feels like an observability product, not a textarea. Judges can see the payload, the timing story, the baseline diff, and the diagnosis without leaving the surface."
-          eyebrow="Inspect"
-          title="Replay console that turns responses into narrative"
+          title="Response details"
         />
         <ResponseConsole />
       </section>
 
       <section className="scroll-mt-32 space-y-4" data-section="pulse-monitor" id="pulse-monitor">
         <SectionIntro
-          action={
-            <span className="badge-good">
-              <Radar className="h-4 w-4" />
-              Fleet pulse live
-            </span>
-          }
-          description="Below the tester, the page stays dense with monitoring surfaces: replay history, endpoint health, trend tracking, and a live triage queue."
-          eyebrow="Pulse Monitor"
-          title="Operational signal stays visible after the request lands"
+          title="Recent activity"
         />
 
         <div className="grid gap-4 2xl:grid-cols-[1.18fr_0.82fr]">
@@ -763,63 +631,11 @@ function DashboardPage({ onNavigate }) {
           </div>
         </div>
 
-        <EndpointHealthGrid />
       </section>
 
-      <section className="scroll-mt-32 space-y-4" data-section="collections" id="collections">
-        <SectionIntro
-          action={
-            <span className="badge-neutral">
-              <ShieldCheck className="h-4 w-4" />
-              Shared replay packs
-            </span>
-          }
-          description="Collections now read like deployable workflows instead of generic folders, reinforcing that CIS Hackathon can move from single-request demos into repeatable operational playbooks."
-          eyebrow="Collections"
-          title="Curated request packs keep the best flows one click away"
-        />
-        <CollectionsPreview items={filteredCollections} />
-      </section>
-
-      <section className="scroll-mt-32 space-y-4" data-section="insight-engine" id="insight-engine">
-        <SectionIntro
-          action={
-            <span className="badge-warning">
-              <TriangleAlert className="h-4 w-4" />
-              Ranked anomalies
-            </span>
-          }
-          description="Insight Engine closes the loop by turning raw alerts into clear, premium operator guidance and a crisp three-step demo narrative."
-          eyebrow="Insight Engine"
-          title="Diagnosis, prioritization, and storytelling in one lane"
-        />
-
-        <div className="grid gap-4 2xl:grid-cols-[1.05fr_0.95fr]">
-          <InsightAlertsPanel />
-          <InsightPlaybookPanel />
-        </div>
-      </section>
-
-      <section className="scroll-mt-32 space-y-4" data-section="settings" id="settings">
-        <SectionIntro
-          action={
-            <span className="badge-info">
-              <Sparkles className="h-4 w-4" />
-              Launch posture
-            </span>
-          }
-          description="The final section reinforces product maturity: environment routing, alerting posture, replay density, and demo mode stay explicit instead of hidden in generic settings UI."
-          eyebrow="Settings"
-          title="Workspace controls that still feel premium on stage"
-        />
-        <SettingsDeck
-          demoMode={demoMode}
-          readinessScore={readinessScore}
-          selectedEnvironment={selectedEnvironment}
-        />
-      </section>
     </div>
   );
 }
 
 export default DashboardPage;
+
