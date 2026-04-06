@@ -19,12 +19,6 @@ const methodToneClasses = {
   PUT: "border-violet-300/20 bg-violet-300/12 text-violet-100",
 };
 
-const requestTabs = [
-  { id: "body", label: "Body", detail: "Payload" },
-  { id: "headers", label: "Headers", detail: "Request headers" },
-  { id: "params", label: "Params", detail: "Query string" },
-  { id: "schema", label: "Notes", detail: "Checks and tests" },
-];
 
 function parseEntries(block) {
   return block
@@ -77,172 +71,19 @@ function RequestComposer() {
   } = useAppState();
 
   const activePreset = requestPresets[activePresetIndex] ?? requestPresets[0];
-  const paramEntries = parseEntries(requestDraft.params);
-  const headerEntries = parseEntries(requestDraft.headers);
   const bodyBytes = requestDraft.body ? new Blob([requestDraft.body]).size : 0;
 
-  const renderRequestTab = () => {
-    if (requestPanelTab === "headers") {
-      return (
-        <>
-          <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-200">Request headers</span>
-            <textarea
-              className="textarea-shell"
-              onChange={(event) => updateRequestField("headers", event.target.value)}
-              placeholder="Authorization: Bearer &lt;token&gt;"
-              value={requestDraft.headers}
-            />
-          </label>
-
-          <div className="grid gap-3">
-            <DetailCard
-              label="Header count"
-              value={String(headerEntries.length).padStart(2, "0")}
-              detail="Keep auth and content type visible while you edit."
-            />
-            <div className="glass-subpanel px-4 py-4">
-              <p className="text-sm font-semibold text-slate-100">Header preview</p>
-              <div className="mt-4 space-y-3">
-                {headerEntries.length ? (
-                  headerEntries.map((entry) => (
-                    <div
-                      key={`${entry.key}-${entry.value}`}
-                      className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3"
-                    >
-                      <span className="font-mono text-xs text-slate-200">{entry.key}</span>
-                      <span className="truncate text-xs text-slate-400">{entry.value}</span>
-                    </div>
-                  ))
-                ) : (
-                  <p className="rounded-2xl border border-dashed border-white/10 px-3 py-4 text-sm text-slate-400">
-                    No headers yet. Add auth or content type if this route needs them.
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    }
-
-    if (requestPanelTab === "params") {
-      return (
-        <>
-          <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-200">Query parameters</span>
-            <textarea
-              className="textarea-shell min-h-[240px]"
-              onChange={(event) => updateRequestField("params", event.target.value)}
-              placeholder={"source=dashboard\nregion=shadow-us"}
-              value={requestDraft.params}
-            />
-          </label>
-
-          <div className="grid gap-3">
-            <DetailCard
-              label="Param slots"
-              value={String(paramEntries.length).padStart(2, "0")}
-              detail="Add query values without cramming them into the URL field."
-            />
-            <div className="glass-subpanel px-4 py-4">
-              <p className="text-sm font-semibold text-slate-100">Resolved preview</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {paramEntries.length ? (
-                  paramEntries.map((entry) => (
-                    <span key={`${entry.key}-${entry.value}`} className="badge-neutral">
-                      {entry.key}
-                      <span className="text-slate-400">=</span>
-                      {entry.value}
-                    </span>
-                  ))
-                ) : (
-                  <p className="rounded-2xl border border-dashed border-white/10 px-3 py-4 text-sm text-slate-400">
-                    No query params yet. Add filters, IDs, or routing hints if you need them.
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    }
-
-    if (requestPanelTab === "schema") {
-      return (
-        <>
-          <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-200">Notes and test stub</span>
-            <textarea
-              className="textarea-shell min-h-[240px]"
-              onChange={(event) => updateRequestField("schema", event.target.value)}
-              placeholder="Add checks, assumptions, or a small test stub"
-              value={requestDraft.schema}
-            />
-          </label>
-
-          <div className="grid gap-3">
-            <DetailCard
-              label="Test lane"
-              value="Ready"
-              detail="Generate a starter test, then edit the expectations before you save the request."
-            />
-            <div className="glass-subpanel px-4 py-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-slate-100">Checks to keep in mind</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Write down what should pass, fail, or stay stable for this route.
-                  </p>
-                </div>
-                <button className="action-chip" onClick={generateTestBlueprint} type="button">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  Generate again
-                </button>
-              </div>
-              <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-                <p className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3">
-                  Check the status code, content type, and any fields that should always be present.
-                </p>
-                <p className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-3">
-                  If the request fails, this tab gives you a place to record what changed and what to verify next.
-                </p>
-              </div>
-            </div>
-          </div>
-        </>
-      );
-    }
-
+  const renderRequestBody = () => {
     return (
-      <>
-        <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-200">Request body</span>
-          <textarea
-            className="textarea-shell"
-            onChange={(event) => updateRequestField("body", event.target.value)}
-            placeholder={`{\n  "message": "Send a structured payload"\n}`}
-            value={requestDraft.body}
-          />
-        </label>
-
-        <div className="grid gap-3">
-          <DetailCard
-            label="Payload size"
-            value={`${bodyBytes} B`}
-            detail="Useful when you want to compare request size against the response that comes back."
-          />
-          <div className="glass-subpanel px-4 py-4">
-            <p className="text-sm font-semibold text-slate-100">Current example</p>
-            <p className="mt-2 text-lg font-semibold text-slate-50">{activePreset.label}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-400">{activePreset.description}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="badge-info">{selectedEnvironment}</span>
-              <span className="badge-neutral">{requestDraft.method} request</span>
-            </div>
-          </div>
-        </div>
-      </>
+      <label className="grid gap-2">
+        <span className="text-sm font-semibold text-slate-200">Request body</span>
+        <textarea
+          className="textarea-shell min-h-[320px]"
+          onChange={(event) => updateRequestField("body", event.target.value)}
+          placeholder={`{\n  "message": "Send a structured payload"\n}`}
+          value={requestDraft.body}
+        />
+      </label>
     );
   };
 
@@ -295,47 +136,15 @@ function RequestComposer() {
           </div>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          {requestTabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`pill-tab ${requestPanelTab === tab.id ? "pill-tab-active" : ""}`}
-              onClick={() => setRequestPanelTab(tab.id)}
-              type="button"
-            >
-              {tab.label}
-              <span className="ml-2 text-xs text-slate-500">{tab.detail}</span>
-            </button>
-          ))}
-        </div>
 
         <motion.div
-          key={requestPanelTab}
-          className="mt-4 grid gap-4 xl:grid-cols-[1.1fr_0.9fr]"
+          className="mt-6"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          {renderRequestTab()}
+          {renderRequestBody()}
         </motion.div>
-
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <DetailCard
-            label="Headers"
-            value={String(headerEntries.length).padStart(2, "0")}
-            detail="Quick count of the headers attached to the current request."
-          />
-          <DetailCard
-            label="Params"
-            value={String(paramEntries.length).padStart(2, "0")}
-            detail="Keeps query values visible without crowding the URL field."
-          />
-          <DetailCard
-            label="Notes"
-            value={requestDraft.schema ? "Primed" : "Empty"}
-            detail="Place for checks, assumptions, or the generated test stub."
-          />
-        </div>
       </div>
     </div>
   );
