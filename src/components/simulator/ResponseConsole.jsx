@@ -15,9 +15,9 @@ import { formatBytes, formatDuration } from "../../utils/formatters";
 
 const responseTabs = [
   { id: "response", label: "Response" },
-  { id: "insights", label: "Insights" },
+  { id: "insights", label: "Issues" },
   { id: "diff", label: "Diff" },
-  { id: "timeline", label: "Timeline" },
+  { id: "timeline", label: "Timing" },
   { id: "diagnosis", label: "Diagnosis" },
 ];
 
@@ -32,20 +32,20 @@ function getSchemaSignal(response) {
   if (response.contentType.includes("application/json") && response.ok) {
     return {
       className: "badge-good",
-      label: "Schema aligned",
+      label: "Looks good",
     };
   }
 
   if (response.contentType.includes("application/json")) {
     return {
       className: "badge-warning",
-      label: "Contract drift",
+      label: "Needs a check",
     };
   }
 
   return {
     className: "badge-neutral",
-    label: "Unverified payload",
+    label: "Unverified",
   };
 }
 
@@ -59,22 +59,22 @@ function buildTimeline(response) {
   return [
     {
       label: "Handshake",
-      detail: "DNS, TLS, and gateway admission",
+      detail: "DNS, TLS, and gateway checks",
       duration: handshake,
     },
     {
-      label: "Auth + policy",
-      detail: "Scopes, rate limits, and routing rules",
+      label: "Auth + routing",
+      detail: "Scopes, rate limits, and route selection",
       duration: auth,
     },
     {
-      label: "Upstream execution",
-      detail: "Application logic and downstream fan-out",
+      label: "Upstream work",
+      detail: "Application logic and downstream calls",
       duration: upstream,
     },
     {
       label: "Decode",
-      detail: "Payload serialization and console render",
+      detail: "Payload parsing and screen render",
       duration: decode,
     },
   ];
@@ -96,23 +96,23 @@ function buildDiffItems(response, baseline) {
       value: baseline ? `${baseline.status} -> ${response.status}` : `${response.status} current`,
       detail:
         response.ok
-          ? "Healthy contract path still responds within the expected status family."
-          : "The current trace deviates from the healthy baseline and should stay in the diagnosis lane.",
+          ? "Compares the current status with the nearest healthy request."
+          : "The current request differs from the closest healthy comparison.",
     },
     {
       label: "Latency delta",
       value: `${durationDelta >= 0 ? "+" : ""}${durationDelta} ms`,
-      detail: "Measures the gap between the live replay and the nearest healthy operating profile.",
+      detail: "Difference between this request and the comparison request.",
     },
     {
       label: "Payload delta",
       value: `${sizeDelta >= 0 ? "+" : ""}${formatBytes(Math.abs(sizeDelta))}`,
-      detail: "Useful for spotting contract expansion, truncation, or empty-body regressions.",
+      detail: "Useful for spotting missing fields, larger payloads, or empty responses.",
     },
     {
       label: "Format check",
       value: response.contentType,
-      detail: "Confirms whether the replay stayed in the expected content-type lane.",
+      detail: "Content type returned by the server.",
     },
   ];
 }
@@ -123,17 +123,14 @@ function EmptyWorkspace() {
       <div className="rounded-[1.4rem] border border-sky-300/18 bg-sky-300/12 p-4 shadow-glow">
         <FileCode2 className="h-7 w-7 text-sky-100" />
       </div>
-      <h3 className="mt-5 font-display text-2xl font-semibold text-slate-50">
-        Replay workspace awaiting first trace
-      </h3>
+      <h3 className="mt-5 font-display text-2xl font-semibold text-slate-50">No response yet</h3>
       <p className="mt-3 max-w-xl text-sm leading-7 text-slate-300/72">
-        Dispatch a probe to unlock response payloads, baseline diffing, latency phases, and guided
-        diagnosis from a single workspace.
+        Run a request to fill this area with the payload, timing, diff, and diagnosis views.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         <span className="badge-neutral">Response payload</span>
         <span className="badge-neutral">Diff against baseline</span>
-        <span className="badge-neutral">Operator diagnosis</span>
+        <span className="badge-neutral">Suggested diagnosis</span>
       </div>
     </div>
   );
@@ -147,9 +144,9 @@ function LoadingWorkspace() {
           <LoaderCircle className="h-5 w-5 animate-spin text-sky-100" />
         </div>
         <div>
-          <p className="font-display text-xl font-semibold text-slate-50">Streaming replay trace</p>
+          <p className="font-display text-xl font-semibold text-slate-50">Sending request</p>
           <p className="mt-1 text-sm text-slate-400">
-            Capturing status, headers, payload shape, and timing phases.
+            Waiting for status, headers, payload, and timing data.
           </p>
         </div>
       </div>
@@ -185,17 +182,19 @@ function ErrorWorkspace({ errorMessage, insights }) {
           <div>
             <div className="badge-danger">
               <TriangleAlert className="h-4 w-4" />
-              Trace failed
+              Request failed
             </div>
             <h3 className="mt-4 font-display text-2xl font-semibold text-slate-50">
-              The probe broke before a response could be profiled
+              The request failed before a response came back
             </h3>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-200/82">{errorMessage}</p>
           </div>
 
           <div className="glass-subpanel border-white/10 bg-slate-950/40 px-4 py-4">
-            <p className="surface-label">Diagnostic posture</p>
-            <p className="mt-2 font-semibold text-slate-50">Switch to a known-good replay, then compare auth and origin settings.</p>
+            <p className="surface-label">Suggested next step</p>
+            <p className="mt-2 font-semibold text-slate-50">
+              Try a known-good request, then compare the URL and auth settings.
+            </p>
           </div>
         </div>
       </div>
@@ -248,13 +247,13 @@ function ResponseConsole() {
     <div className="glass-card overflow-hidden p-6">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div>
-          <p className="surface-label">Replay Console</p>
+          <p className="surface-label">Response Viewer</p>
           <h3 className="mt-2 font-display text-3xl font-semibold text-slate-50">
-            Inspect payloads like an <span className="text-gradient">observability workspace</span>
+            See the response, timing, and likely issue
           </h3>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300/76">
-            Response data, diff analysis, timing phases, and diagnosis live together so the demo
-            feels like a product, not a raw debug dump.
+            Payload, timing, diff, and diagnosis stay together so you can scan the important parts
+            quickly.
           </p>
         </div>
 
@@ -265,7 +264,7 @@ function ResponseConsole() {
             type="button"
           >
             <Copy className="mr-2 h-4 w-4" />
-            Copy payload
+            Copy response
           </button>
         ) : null}
       </div>
@@ -359,7 +358,7 @@ function ResponseConsole() {
             {responseTab === "timeline" ? (
               <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                 <div className="glass-subpanel px-4 py-4">
-                  <p className="text-sm font-semibold text-slate-100">Execution phases</p>
+                  <p className="text-sm font-semibold text-slate-100">Request timing</p>
                   <div className="mt-4 space-y-4">
                     {timeline.map((step) => (
                       <div key={step.label}>
@@ -368,7 +367,7 @@ function ResponseConsole() {
                           <span className="text-slate-400">{formatDuration(step.duration)}</span>
                         </div>
                         <div className="mt-2 h-2 rounded-full bg-white/[0.06]">
-                        <div
+                          <div
                             className="h-2 rounded-full bg-gradient-to-r from-sky-300 to-emerald-300"
                             style={{
                               width: `${Math.max(18, (step.duration / responseDuration) * 100)}%`,
@@ -382,22 +381,22 @@ function ResponseConsole() {
                 </div>
 
                 <div className="glass-subpanel px-4 py-4">
-                  <p className="text-sm font-semibold text-slate-100">Trace summary</p>
+                  <p className="text-sm font-semibold text-slate-100">Request summary</p>
                   <div className="mt-4 grid gap-3">
                     <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4">
                       <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Endpoint</p>
                       <p className="mt-2 break-all text-sm text-slate-100">{response.url}</p>
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Payload lane</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Content type</p>
                       <p className="mt-2 text-sm text-slate-100">{response.contentType}</p>
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Replay posture</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Current state</p>
                       <p className="mt-2 text-sm text-slate-100">
                         {response.ok
-                          ? "Healthy replay suitable for baseline capture."
-                          : "Anomalous replay suitable for live diagnosis."}
+                          ? "Healthy result. Good candidate for a baseline."
+                          : "Problematic result. Worth keeping visible while you debug."}
                       </p>
                     </div>
                   </div>
@@ -413,14 +412,14 @@ function ResponseConsole() {
                       <Bot className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-slate-100">Root-cause summary</p>
+                      <p className="text-sm font-semibold text-slate-100">Likely cause</p>
                       <p className="mt-1 text-sm text-slate-400">
-                        The insight engine ranks the most likely operational story for this trace.
+                        These notes are based on the current response state.
                       </p>
                     </div>
                   </div>
                   <div className="mt-5 rounded-[1.4rem] border border-white/10 bg-white/[0.04] px-4 py-4">
-                    <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Primary finding</p>
+                    <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Main finding</p>
                     <p className="mt-3 font-display text-2xl font-semibold text-slate-50">
                       {debuggerInsights[0]?.title}
                     </p>
@@ -432,23 +431,23 @@ function ResponseConsole() {
                   <div className="glass-subpanel px-4 py-4">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-emerald-200" />
-                      <p className="text-sm font-semibold text-slate-100">Recommended move</p>
+                      <p className="text-sm font-semibold text-slate-100">Suggested next step</p>
                     </div>
                     <p className="mt-3 text-sm leading-6 text-slate-400">
                       {response.ok
-                        ? "Save this replay as a golden path, then run a failure preset to show the diagnosis lane."
-                        : "Compare this trace against a healthy replay, then verify auth and schema cues before retrying."}
+                        ? "Save this result if you want a clean baseline, then run one failing example for comparison."
+                        : "Compare this result against a healthy request, then verify auth and response format before retrying."}
                     </p>
                   </div>
                   <div className="glass-subpanel px-4 py-4">
                     <div className="flex items-center gap-2">
                       <TriangleAlert className="h-4 w-4 text-amber-200" />
-                      <p className="text-sm font-semibold text-slate-100">Operational risk</p>
+                      <p className="text-sm font-semibold text-slate-100">Why it matters</p>
                     </div>
                     <p className="mt-3 text-sm leading-6 text-slate-400">
                       {!response.ok || response.duration > 900
-                        ? "This replay should stay visible in Pulse Monitor until the status, latency, or contract returns to baseline."
-                        : "This replay is stable enough to act as a baseline for future contract or latency drift."}
+                        ? "This request should stay visible in the traffic view until the status, timing, or payload goes back to normal."
+                        : "This result is stable enough to use as a baseline for future checks."}
                     </p>
                   </div>
                 </div>
@@ -459,7 +458,7 @@ function ResponseConsole() {
               <div className="grid gap-4 xl:grid-cols-[0.94fr_1.06fr]">
                 <div className="grid gap-4">
                   <div className="glass-subpanel px-4 py-4">
-                    <p className="text-sm font-semibold text-slate-100">Replay summary</p>
+                    <p className="text-sm font-semibold text-slate-100">Response summary</p>
                     <div className="mt-4 grid gap-3">
                       <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
                         <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Status</p>
@@ -472,11 +471,11 @@ function ResponseConsole() {
                         <p className="mt-2 text-sm text-slate-100">{response.contentType}</p>
                       </div>
                       <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Operator note</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Notes</p>
                         <p className="mt-2 text-sm text-slate-100">
                           {response.ok
-                            ? "Healthy trace captured. Use it as the baseline for diff and diagnosis."
-                            : "This trace should be narrated as an anomaly, then replayed against a healthy control."}
+                            ? "Healthy response captured. Use it as the baseline for diff and diagnosis."
+                            : "This response is a good example of a failure case to compare against a healthy result."}
                         </p>
                       </div>
                     </div>

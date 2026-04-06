@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: "#050816",
-        panel: "rgba(8, 15, 29, 0.86)",
-        stroke: "rgba(148, 163, 184, 0.14)",
+        canvas: "#f5f4ef",
+        panel: "rgba(15, 23, 42, 0.96)",
+        stroke: "rgba(148, 163, 184, 0.18)",
       },
       fontFamily: {
         sans: ['"Manrope"', "ui-sans-serif", "system-ui"],
@@ -14,16 +14,14 @@ export default {
         mono: ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
       boxShadow: {
-        panel:
-          "0 28px 90px rgba(2, 6, 23, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06)",
-        glow:
-          "0 0 0 1px rgba(125, 211, 252, 0.14), 0 18px 46px rgba(56, 189, 248, 0.14)",
+        panel: "0 18px 40px rgba(15, 23, 42, 0.14)",
+        glow: "0 0 0 1px rgba(148, 163, 184, 0.14), 0 14px 28px rgba(15, 23, 42, 0.14)",
         "glow-strong":
-          "0 0 0 1px rgba(103, 232, 249, 0.16), 0 26px 80px rgba(14, 165, 233, 0.2)",
+          "0 0 0 1px rgba(56, 189, 248, 0.16), 0 18px 38px rgba(15, 23, 42, 0.18)",
       },
       backgroundImage: {
         "hero-grid":
-          "linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px)",
+          "linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px)",
       },
     },
   },

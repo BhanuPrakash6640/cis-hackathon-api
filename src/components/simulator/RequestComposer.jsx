@@ -1,12 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  BookmarkPlus,
-  Braces,
-  FileCode2,
-  Play,
-  SendHorizonal,
-  Sparkles,
-} from "lucide-react";
+import { SendHorizonal } from "lucide-react";
 import { useAppState } from "../../context/AppStateContext";
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
@@ -20,58 +13,14 @@ const methodToneClasses = {
 };
 
 
-function parseEntries(block) {
-  return block
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const separatorIndex = line.includes("=") ? line.indexOf("=") : line.indexOf(":");
-
-      if (separatorIndex === -1) {
-        return {
-          key: line,
-          value: "pending",
-        };
-      }
-
-      return {
-        key: line.slice(0, separatorIndex).trim(),
-        value: line.slice(separatorIndex + 1).trim(),
-      };
-    });
-}
-
-function DetailCard({ label, value, detail }) {
-  return (
-    <div className="glass-subpanel px-4 py-4">
-      <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{label}</p>
-      <p className="mt-2 font-display text-xl font-semibold text-slate-50">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-slate-400">{detail}</p>
-    </div>
-  );
-}
-
 function RequestComposer() {
   const {
-    activePresetIndex,
-    applyPreset,
-    exportRequestCode,
-    generateTestBlueprint,
-    loadNextPreset,
     requestDraft,
-    requestPanelTab,
-    requestPresets,
     requestState,
-    saveCurrentRequest,
-    selectedEnvironment,
     sendRequest,
-    setRequestPanelTab,
     updateRequestField,
   } = useAppState();
 
-  const activePreset = requestPresets[activePresetIndex] ?? requestPresets[0];
-  const bodyBytes = requestDraft.body ? new Blob([requestDraft.body]).size : 0;
 
   const renderRequestBody = () => {
     return (

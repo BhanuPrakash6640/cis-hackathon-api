@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -17,7 +17,7 @@ html {
 }
 
 body {
-  @apply m-0 min-h-screen overflow-x-hidden bg-canvas font-sans text-slate-100;
+  @apply m-0 min-h-screen overflow-x-hidden bg-stone-50 font-sans text-slate-900;
 }
 
 body::before {
@@ -26,11 +26,10 @@ body::before {
   inset: -18%;
   z-index: -4;
   background:
-    radial-gradient(circle at 12% 12%, rgba(56, 189, 248, 0.24), transparent 22%),
-    radial-gradient(circle at 86% 10%, rgba(45, 212, 191, 0.16), transparent 18%),
-    radial-gradient(circle at 72% 66%, rgba(59, 130, 246, 0.14), transparent 24%),
-    radial-gradient(circle at 32% 88%, rgba(244, 114, 182, 0.12), transparent 22%),
-    linear-gradient(180deg, #070c19 0%, #040813 48%, #03050d 100%);
+    radial-gradient(circle at 10% 12%, rgba(14, 165, 233, 0.08), transparent 24%),
+    radial-gradient(circle at 82% 16%, rgba(245, 158, 11, 0.08), transparent 20%),
+    radial-gradient(circle at 66% 72%, rgba(15, 23, 42, 0.05), transparent 24%),
+    linear-gradient(180deg, #fafaf9 0%, #f5f5f4 56%, #f8fafc 100%);
 }
 
 body::after {
@@ -39,16 +38,16 @@ body::after {
   inset: 0;
   z-index: -3;
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
   background-position: center center;
-  background-size: 58px 58px;
-  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.82), transparent 86%);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.92), transparent 86%);
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.28);
-  color: #e2f3ff;
+  background: rgba(56, 189, 248, 0.22);
+  color: #0f172a;
 }
 
 ::-webkit-scrollbar {
@@ -56,34 +55,34 @@ body::after {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(8, 15, 29, 0.72);
+  background: rgba(226, 232, 240, 0.9);
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 3px solid rgba(8, 15, 29, 0.72);
+  border: 3px solid rgba(226, 232, 240, 0.9);
   border-radius: 9999px;
   background: linear-gradient(180deg, rgba(56, 189, 248, 0.55), rgba(14, 165, 233, 0.25));
 }
 
 @layer components {
   .glass-shell {
-    @apply rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(11,18,31,0.88),rgba(8,14,26,0.68))] shadow-panel backdrop-blur-2xl;
+    @apply rounded-[2rem] border border-slate-800/90 bg-slate-950 shadow-panel;
   }
 
   .glass-card {
-    @apply rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(10,18,33,0.86),rgba(7,13,24,0.64))] shadow-panel backdrop-blur-xl;
+    @apply rounded-[1.75rem] border border-slate-800 bg-slate-950 shadow-panel;
   }
 
   .glass-subpanel {
-    @apply rounded-[1.4rem] border border-white/10 bg-slate-950/50 backdrop-blur-lg;
+    @apply rounded-[1.4rem] border border-slate-800 bg-slate-900;
   }
 
   .surface-label {
-    @apply text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-sky-200 opacity-70;
+    @apply text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-slate-400;
   }
 
   .text-gradient {
-    background: linear-gradient(115deg, #f8fafc 0%, #dbeafe 24%, #67e8f9 58%, #a3e635 100%);
+    background: linear-gradient(115deg, #f8fafc 0%, #e2e8f0 42%, #7dd3fc 100%);
     -webkit-background-clip: text;
     color: transparent;
   }
@@ -109,11 +108,11 @@ body::after {
   }
 
   .button-primary {
-    @apply inline-flex items-center justify-center rounded-full border border-sky-300/20 bg-sky-300/10 px-5 py-3 text-sm font-semibold text-sky-50 transition hover:border-sky-200/40 hover:bg-sky-300/20 hover:shadow-glow;
+    @apply inline-flex items-center justify-center rounded-full border border-white bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100;
   }
 
   .button-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-100 transition hover:border-white/20 hover:bg-white/10;
+    @apply inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-medium text-slate-100 transition hover:border-white/20 hover:bg-white/[0.08];
   }
 
   .hover-lift {
@@ -121,11 +120,11 @@ body::after {
   }
 
   .input-shell {
-    @apply h-12 rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-300/30 focus:bg-white/10;
+    @apply h-12 rounded-2xl border border-slate-300 bg-white px-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500;
   }
 
   .textarea-shell {
-    @apply min-h-[240px] rounded-[1.5rem] border border-white/10 bg-slate-950/60 px-4 py-4 font-mono text-sm leading-7 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-sky-300/30;
+    @apply min-h-[240px] rounded-[1.5rem] border border-slate-300 bg-white px-4 py-4 font-mono text-sm leading-7 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-500;
   }
 
   .pill-tab {
@@ -149,6 +148,6 @@ body::after {
   }
 
   .skeleton {
-    @apply animate-pulse rounded-2xl bg-white/5;
+    @apply animate-pulse rounded-2xl bg-slate-200;
   }
 }

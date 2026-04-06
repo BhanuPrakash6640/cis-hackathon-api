@@ -120,7 +120,7 @@ function createHistoryEntry({ requestDraft, response, error }) {
     duration: response?.duration ?? 0,
     environment: "Prod Shadow",
     timestamp: buildTimestampLabel(),
-    source: "Command deck",
+    source: "Request runner",
     responseSize: response?.size ?? 0,
     errorMessage: error?.message,
   };
@@ -130,16 +130,16 @@ function deriveDebuggerInsights(response, error) {
   if (error) {
     return [
       {
-        title: "Probe failed before replay capture",
+        title: "Request failed before a response came back",
         severity: "High",
         detail:
-          "The request never resolved into an HTTP payload. Inspect the endpoint, CORS policy, local API availability, or TLS setup before retrying.",
+          "The request never resolved into an HTTP response. Check the URL, CORS rules, local API availability, or TLS setup before retrying.",
       },
       {
-        title: "Best next move",
+        title: "Next step",
         severity: "Action",
         detail:
-          "Replay a known-good health probe first, then compare URL, auth headers, and origin policy against the failing route.",
+          "Run a known-good request first, then compare the URL, auth headers, and origin policy against the failing route.",
       },
     ];
   }
@@ -147,10 +147,10 @@ function deriveDebuggerInsights(response, error) {
   if (!response) {
     return [
       {
-        title: "Replay workspace is standing by",
+        title: "Response panel is waiting",
         severity: "Standby",
         detail:
-          "Dispatch a request to unlock structured payload diffs, latency breakdowns, and root-cause hints in this workspace.",
+          "Run a request to populate the payload, timing, diff, and diagnosis tabs.",
       },
     ];
   }
@@ -159,10 +159,10 @@ function deriveDebuggerInsights(response, error) {
 
   if (response.status >= 500) {
     insights.push({
-      title: "Server-side fault surfaced",
+      title: "Server-side error",
       severity: "High",
       detail:
-        "The service returned a 5xx response. Compare the same replay in staging first, then inspect upstream dependency health and timeout budgets.",
+        "The service returned a 5xx response. Compare the same route in staging first, then inspect upstream dependencies and timeout settings.",
     });
   }
 
@@ -171,22 +171,22 @@ function deriveDebuggerInsights(response, error) {
       title: "Credential or scope mismatch",
       severity: "Medium",
       detail:
-        "The response suggests missing or invalid credentials. Verify bearer tokens, scopes, and cookie propagation before replaying.",
+        "The response suggests missing or invalid credentials. Verify bearer tokens, scopes, and cookie propagation before retrying.",
     });
   }
 
   if (response.duration > 900) {
     insights.push({
-      title: "Latency budget exceeded",
+      title: "Slow response",
       severity: "Medium",
       detail:
-        "Observed response time exceeded the p95 target. Cache misses, fan-out calls, or degraded upstreams are likely sources.",
+        "Response time exceeded the target. Cache misses, fan-out calls, or degraded upstreams are the likely causes.",
     });
   }
 
   if (!response.contentType.includes("application/json")) {
     insights.push({
-      title: "Payload contract needs verification",
+      title: "Payload format needs a quick check",
       severity: "Low",
       detail:
         "The server did not return JSON. Confirm `Accept` headers and verify whether this route intentionally serves plain text or HTML.",
@@ -195,10 +195,10 @@ function deriveDebuggerInsights(response, error) {
 
   if (!insights.length) {
     insights.push({
-      title: "Healthy response profile",
+      title: "Healthy response",
       severity: "Info",
       detail:
-        "Status, latency, and payload shape all look healthy. Save this request into a collection as a regression baseline.",
+        "Status, latency, and payload shape all look healthy. Save this request if you want a clean baseline for future checks.",
     });
   }
 
@@ -365,13 +365,12 @@ export function AppStateProvider({ children }) {
           return [
             {
               id: "col-scratchpad",
-              name: "Rapid Replay",
+              name: "Saved This Session",
               owner: "You",
               requestCount: 1,
-              description:
-                "Fast saves from the command deck during demos, incident replay, and operator debugging.",
+              description: "Requests saved from the runner while testing or debugging.",
               lastUpdated: "Just now",
-              tags: ["saved", "replay"],
+              tags: ["saved", "manual"],
             },
             ...current,
           ];

@@ -55,11 +55,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-slate-100">
+    <div className="min-h-screen bg-white text-slate-900">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.16),_transparent_24%),radial-gradient(circle_at_82%_10%,_rgba(16,185,129,0.14),_transparent_18%),radial-gradient(circle_at_70%_72%,_rgba(59,130,246,0.12),_transparent_22%)]" />
-        <div className="absolute left-[-8rem] top-[22rem] h-72 w-72 rounded-full bg-sky-500/10 blur-[120px]" />
-        <div className="absolute right-[-5rem] top-20 h-64 w-64 rounded-full bg-emerald-400/10 blur-[110px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.06),_transparent_22%),radial-gradient(circle_at_82%_10%,_rgba(245,158,11,0.05),_transparent_18%),radial-gradient(circle_at_70%_72%,_rgba(15,23,42,0.04),_transparent_24%)]" />
+        <div className="absolute left-[-8rem] top-[22rem] h-72 w-72 rounded-full bg-sky-300/10 blur-[120px]" />
+        <div className="absolute right-[-5rem] top-20 h-64 w-64 rounded-full bg-amber-200/10 blur-[110px]" />
       </div>
 
       <Sidebar
