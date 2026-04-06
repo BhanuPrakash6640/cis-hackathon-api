@@ -251,61 +251,6 @@ function RequestComposer() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.16),_transparent_24%),radial-gradient(circle_at_bottom_left,_rgba(45,212,191,0.12),_transparent_26%)]" />
 
       <div className="relative">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-          <div>
-            <h3 className="font-display text-3xl font-semibold text-slate-50">
-              Request Builder
-            </h3>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <span className={requestState.loading ? "badge-info" : "badge-good"}>
-              <span className={`status-dot ${requestState.loading ? "bg-sky-300" : "bg-emerald-300"}`} />
-              {requestState.loading ? "Sending" : "Ready"}
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-wrap gap-2">
-          <button className="action-chip" onClick={loadNextPreset} type="button">
-            <Play className="h-3.5 w-3.5" />
-            Next example
-          </button>
-          <button className="action-chip" onClick={saveCurrentRequest} type="button">
-            <BookmarkPlus className="h-3.5 w-3.5" />
-            Save request
-          </button>
-          <button className="action-chip" onClick={generateTestBlueprint} type="button">
-            <Sparkles className="h-3.5 w-3.5" />
-            Create test stub
-          </button>
-          <button className="action-chip" onClick={exportRequestCode} type="button">
-            <FileCode2 className="h-3.5 w-3.5" />
-            Copy fetch code
-          </button>
-        </div>
-
-        <div className="mt-5 grid gap-3 xl:grid-cols-3">
-          {requestPresets.map((preset, index) => {
-            const isActive = index === activePresetIndex;
-
-            return (
-              <button
-                key={preset.label}
-                className={`glass-subpanel hover-lift px-4 py-4 text-left ${
-                  isActive ? "border-sky-300/24 bg-sky-300/10" : ""
-                }`}
-                onClick={() => applyPreset(preset, index)}
-                type="button"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="font-semibold text-slate-100">{preset.label}</p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
         <div className="mt-6 glass-subpanel px-4 py-4">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
             <div className="flex flex-wrap gap-2 xl:w-[34%]">
